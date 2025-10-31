@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0f14">
+  <title>RuZAdacha V6</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div id="app" class="theme-neon">
+  <header class="topbar">
+    <div class="left">
+      <button id="hamburger" class="hamburger" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+      <button id="homeBtn" class="brand-btn" aria-label="Домой">
+        <img class="brand-logo" src="./assets/logo.png" alt="Логотип" />
+        <div class="title">RuZAdacha</div>
+      </button>
+    </div>
+  </header>
+
+  <div class="drawer" aria-modal="true" role="dialog">
+    <div class="drawer-header">
+      <img class="brand-logo" src="./assets/logo.png" alt="Логотип" />
+      <div class="title">Меню</div>
+    </div>
+    <nav class="drawer-list">
+      <button class="drawer-item" onclick="goTab(0)">Сегодня</button>
+      <button class="drawer-item" onclick="goTab(1)">Идеи</button>
+      <button class="drawer-item" onclick="goTab(2)">Задачи</button>
+      <button class="drawer-item" onclick="goTab(3)">Деньги</button>
+      <button class="drawer-item" onclick="goTab(4)">Привычки</button>
+      <button class="drawer-item" onclick="goTab(5)">Аналитика</button>
+      <div class="drawer-spacer"></div>
+      <button class="drawer-item settings" onclick="goTab(6)">Настройки</button>
+    </nav>
+  </div>
+  <div class="scrim" aria-hidden="true"></div>
+
+  <main class="content">
+    <section id="screen-today" class="screen active"><h1>Сегодня</h1></section>
+    <section id="screen-ideas" class="screen"><h1>Идеи</h1></section>
+    <section id="screen-tasks" class="screen"><h1>Задачи</h1></section>
+    <section id="screen-finance" class="screen"><h1>Деньги</h1></section>
+    <section id="screen-habits" class="screen"><h1>Привычки</h1></section>
+    <section id="screen-analytics" class="screen"><h1>Аналитика</h1></section>
+    <section id="screen-settings" class="screen">
+      <h1>Настройки</h1>
+      <div class="card">
+        <div class="card-title">Тема приложения</div>
+        <div class="list">
+          <label class="row"><input type="radio" name="theme" value="neon" checked> <span>Неоновая</span></label>
+          <label class="row"><input type="radio" name="theme" value="gradient"> <span>Градиентная</span></label>
+          <label class="row"><input type="radio" name="theme" value="black"> <span>Чёрная</span></label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bottombar">
+    <button id="openSettings" class="btn ghost only-mobile">⚙️ Настройки</button>
+  </footer>
+</div>
+
+<script src="./js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      const reg = await navigator.serviceWorker.register('./sw.js?v=600');
+      if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            location.reload();
+          }
+        });
+      });
+    });
+  }
+</script>
+</body>
+</html>
